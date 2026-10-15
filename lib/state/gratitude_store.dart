@@ -287,19 +287,23 @@ class GratitudeStore extends ChangeNotifier {
     // هر ثبتِ شکرگذاری همیشه یک رشته‌ی «جدید» می‌سازه. اگه روی ادمک حسی
     // انتخاب شده باشه، رشته به رنگِ قوی‌ترین حس (بالاترین فرکانس) ساخته می‌شه و
     // بعدش ادمک ریست می‌شه تا برای دفعه‌ی بعد آماده باشه.
-    NeuralFiberEmotion? felt;
-    if (emoIds.isNotEmpty) {
-      final dom = dominantEmotion(emoIds);
-      if (dom != null) {
-        felt = NeuralFiberEmotion(
-          ids: List.of(emoIds),
-          color: dom.color,
-          freq: dom.freq,
-        );
+    // خریدِ فروشگاه (source == 'purchase') در وب رشته‌ی شکرگذاری نمی‌سازه؛
+    // فقط شکرگذاری‌های واقعی رشته می‌سازن.
+    if (source != 'purchase') {
+      NeuralFiberEmotion? felt;
+      if (emoIds.isNotEmpty) {
+        final dom = dominantEmotion(emoIds);
+        if (dom != null) {
+          felt = NeuralFiberEmotion(
+            ids: List.of(emoIds),
+            color: dom.color,
+            freq: dom.freq,
+          );
+        }
       }
+      neural.addAutoFiber(emotion: felt);
+      if (felt != null) emotions?.clear();
     }
-    neural.addAutoFiber(emotion: felt);
-    if (felt != null) emotions?.clear();
 
     await _persist();
     notifyListeners();
