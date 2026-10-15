@@ -1,47 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'app.dart';
 import 'state/emotion_store.dart';
 import 'state/gratitude_store.dart';
-import 'state/map_store.dart';
-// بقیه‌ی storeها را اگر داری import کن
-import 'state/abundance_store.dart';
-import 'state/beliefs_store.dart';
-import 'state/motivation_store.dart';
-import 'state/theme_store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MaghzApp());
+  runApp(const MaghzRoot());
 }
 
-class MaghzApp extends StatelessWidget {
-  const MaghzApp({super.key});
+class MaghzRoot extends StatelessWidget {
+  const MaghzRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ThemeStore()..load()),
-        ChangeNotifierProvider(create: (_) => MapStore()..load()),
         ChangeNotifierProvider(create: (_) => GratitudeStore()..load()),
-        ChangeNotifierProvider(create: (_) => AbundanceStore()..load()),
-        ChangeNotifierProvider(create: (_) => BeliefsStore()..load()),
-        ChangeNotifierProvider(create: (_) => MotivationStore()..load()),
         ChangeNotifierProvider(create: (_) => EmotionStore()),
+        // بقیه‌ی storeها را اگر قبلاً داشتی، با آرگومان درست اضافه کن
+        // ChangeNotifierProvider(create: (_) => MapStore(/* args */)..load()),
       ],
-      child: const _WireUp(child: App()),
+      child: const _WireUp(child: MaghzApp()),
     );
   }
 }
 
-/// اتصال EmotionStore به GratitudeStore برای رنگ‌آمیزی تقویم
 class _WireUp extends StatefulWidget {
   final Widget child;
   const _WireUp({required this.child});
-  final Widget child;
 
   @override
   State<_WireUp> createState() => _WireUpState();
@@ -64,18 +52,4 @@ class _WireUpState extends State<_WireUp> {
 
   @override
   Widget build(BuildContext context) => widget.child;
-}
-
-/// این فقط برای اطمینان است؛ فایل app.dart خودت باید MaterialApp را بسازد.
-class Localizations extends StatelessWidget {
-  final Widget child;
-  const Localizations({super.key, required this.child});
-  @override
-  Widget build(BuildContext context) {
-    return Localizations.override(
-      context: context,
-      locale: const Locale('fa', 'IR'),
-      child: child,
-    );
-  }
 }
