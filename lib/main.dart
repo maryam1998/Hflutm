@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'app.dart';
+// state ها
+import 'state/theme_store.dart';
 import 'state/emotion_store.dart';
 import 'state/gratitude_store.dart';
+import 'state/motivation_store.dart';
+import 'state/angels_store.dart';
+import 'state/background_store.dart';
+import 'state/map_store.dart';
+import 'state/abundance_store.dart';
+import 'state/beliefs_store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,21 +25,22 @@ class MaghzRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => ThemeStore()..load()),
         ChangeNotifierProvider(create: (_) => GratitudeStore()..load()),
         ChangeNotifierProvider(create: (_) => EmotionStore()),
-        // ⚠️ اگر در app.dart یا صفحات دیگر از store های دیگری
-        // مثل MapStore, AbundanceStore, BeliefsStore, MotivationStore,
-        // ThemeStore, AngelsStore, BackgroundStore استفاده می‌کنی،
-        // اینجا اضافه‌شان کن — دقیقاً با همان constructor که داشتند.
-        // مثال:
-        // ChangeNotifierProvider(create: (_) => ThemeStore()..load()),
+        ChangeNotifierProvider(create: (_) => MotivationStore()..load()),
+        ChangeNotifierProvider(create: (_) => AngelsStore()..load()),
+        ChangeNotifierProvider(create: (_) => BackgroundStore()..load()),
+        ChangeNotifierProvider(create: (_) => MapStore()..load()),
+        ChangeNotifierProvider(create: (_) => AbundanceStore()..load()),
+        ChangeNotifierProvider(create: (_) => BeliefsStore()..load()),
       ],
-      child: const _WireUp(child: App()),
+      child: const _WireUp(child: MaghzApp()),
     );
   }
 }
 
-/// اتصال EmotionStore به GratitudeStore برای رنگ‌آمیزی تقویم
+/// اتصال EmotionStore به GratitudeStore (برای رنگ‌آمیزی تقویم با حس‌ها)
 class _WireUp extends StatefulWidget {
   final Widget child;
   const _WireUp({required this.child});
@@ -48,11 +57,15 @@ class _WireUpState extends State<_WireUp> {
     super.didChangeDependencies();
     if (_wired) return;
     _wired = true;
-    final grat = context.read<GratitudeStore>();
-    final emo = context.read<EmotionStore>();
-    emo.onEmotionsCommitted = (ids, dayKey) async {
-      await grat.updateDayEmotions(dayKey, ids);
-    };
+    try {
+      final grat = context.read<GratitudeStore>();
+      final emo = context.read<EmotionStore>();
+      emo.onEmotionsCommitted = (ids, dayKey) async {
+        await grat.updateDayEmotions(dayKey, ids);
+      };
+    } catch (_) {
+      // اگه EmotionStore متد onEmotionsCommitted رو نداشت، نادیده بگیر
+    }
   }
 
   @override
