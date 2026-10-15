@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'google_fonts_local.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/map_tab.dart';
