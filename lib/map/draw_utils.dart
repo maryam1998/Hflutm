@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../google_fonts_local.dart';
 import '../services/media_db.dart';
 
 Color withOp(Color c, double o) => c.withAlpha((o.clamp(0.0, 1.0) * 255).round());
