@@ -19,14 +19,19 @@ class MaghzRoot extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => GratitudeStore()..load()),
         ChangeNotifierProvider(create: (_) => EmotionStore()),
-        // بقیه‌ی storeها را اگر قبلاً داشتی، با آرگومان درست اضافه کن
-        // ChangeNotifierProvider(create: (_) => MapStore(/* args */)..load()),
+        // ⚠️ اگر در app.dart یا صفحات دیگر از store های دیگری
+        // مثل MapStore, AbundanceStore, BeliefsStore, MotivationStore,
+        // ThemeStore, AngelsStore, BackgroundStore استفاده می‌کنی،
+        // اینجا اضافه‌شان کن — دقیقاً با همان constructor که داشتند.
+        // مثال:
+        // ChangeNotifierProvider(create: (_) => ThemeStore()..load()),
       ],
-      child: const _WireUp(child: MaghzApp()),
+      child: const _WireUp(child: App()),
     );
   }
 }
 
+/// اتصال EmotionStore به GratitudeStore برای رنگ‌آمیزی تقویم
 class _WireUp extends StatefulWidget {
   final Widget child;
   const _WireUp({required this.child});
