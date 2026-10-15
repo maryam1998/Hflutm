@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 const kLightBg = Color(0xFFF5EFE0);
 const kLightBg2 = Color(0xFFEDE5D5);
@@ -8,13 +7,20 @@ const kDarkBg = Color(0xFF0B0D1E);
 const kDarkBg2 = Color(0xFF151933);
 
 // ---------- پالت صفحه‌ی «اهداف» (هم‌رنگ وب) ----------
-const kGoalsBg = Color(0xFFFBF6EA); // کرم
-const kGoalsGold = Color(0xFFC9972B); // طلایی
-const kGoalsInk = Color(0xFF2A2218); // متن
-const kGoalsMuted = Color(0xFF7A6B57); // متن کم‌رنگ
-const kGoalsBorder = Color(0xFFE0D5C0); // حاشیه
+const kGoalsBg = Color(0xFFFBF6EA);
+const kGoalsGold = Color(0xFFC9972B);
+const kGoalsInk = Color(0xFF2A2218);
+const kGoalsMuted = Color(0xFF7A6B57);
+const kGoalsBorder = Color(0xFFE0D5C0);
 
-// ---------- تم روشن (پیش‌فرض — شبیه وب) ----------
+const String kAppFont = 'Vazirmatn';
+
+TextTheme _faTextTheme(TextTheme base, Color ink) {
+  return base
+      .apply(fontFamily: kAppFont, bodyColor: ink, displayColor: ink);
+}
+
+// ---------- تم روشن ----------
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   scaffoldBackgroundColor: kLightBg,
@@ -23,13 +29,15 @@ final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
   ),
   useMaterial3: true,
-  textTheme: GoogleFonts.vazirmatnTextTheme(),
-  appBarTheme: AppBarTheme(
+  fontFamily: kAppFont,
+  textTheme: _faTextTheme(ThemeData.light().textTheme, kLightInk),
+  appBarTheme: const AppBarTheme(
     backgroundColor: kLightBg,
     foregroundColor: kLightInk,
     elevation: 0,
     centerTitle: true,
-    titleTextStyle: GoogleFonts.vazirmatn(
+    titleTextStyle: TextStyle(
+      fontFamily: kAppFont,
       fontSize: 17,
       fontWeight: FontWeight.w700,
       color: kLightInk,
@@ -38,13 +46,13 @@ final ThemeData lightTheme = ThemeData(
   navigationBarTheme: NavigationBarThemeData(
     backgroundColor: kLightBg,
     indicatorColor: const Color(0xFFC9972B).withAlpha(60),
-    labelTextStyle: WidgetStatePropertyAll(
-      GoogleFonts.vazirmatn(fontSize: 11, fontWeight: FontWeight.w600),
+    labelTextStyle: const WidgetStatePropertyAll(
+      TextStyle(fontFamily: kAppFont, fontSize: 11, fontWeight: FontWeight.w600),
     ),
   ),
   snackBarTheme: const SnackBarThemeData(
     backgroundColor: kLightInk,
-    contentTextStyle: TextStyle(color: Colors.white),
+    contentTextStyle: TextStyle(fontFamily: kAppFont, color: Colors.white),
   ),
 );
 
@@ -57,13 +65,15 @@ final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
   ),
   useMaterial3: true,
-  textTheme: GoogleFonts.vazirmatnTextTheme(ThemeData.dark().textTheme),
-  appBarTheme: AppBarTheme(
+  fontFamily: kAppFont,
+  textTheme: _faTextTheme(ThemeData.dark().textTheme, Colors.white),
+  appBarTheme: const AppBarTheme(
     backgroundColor: kDarkBg,
     foregroundColor: Colors.white,
     elevation: 0,
     centerTitle: true,
-    titleTextStyle: GoogleFonts.vazirmatn(
+    titleTextStyle: TextStyle(
+      fontFamily: kAppFont,
       fontSize: 17,
       fontWeight: FontWeight.w700,
       color: Colors.white,
@@ -72,18 +82,19 @@ final ThemeData darkTheme = ThemeData(
   navigationBarTheme: NavigationBarThemeData(
     backgroundColor: kDarkBg,
     indicatorColor: const Color(0xFF5EC8F0).withAlpha(60),
-    labelTextStyle: WidgetStatePropertyAll(
-      GoogleFonts.vazirmatn(fontSize: 11, fontWeight: FontWeight.w600),
+    labelTextStyle: const WidgetStatePropertyAll(
+      TextStyle(fontFamily: kAppFont, fontSize: 11, fontWeight: FontWeight.w600),
     ),
   ),
 );
 
-/// تم روشنِ کرم/طلایی مخصوص صفحه‌ی اهداف و دیالوگ‌های داخل آن
+// ---------- تم کرم/طلایی صفحه اهداف ----------
 final ThemeData goalsLightTheme = () {
   final base = ThemeData(
     brightness: Brightness.light,
     useMaterial3: true,
     scaffoldBackgroundColor: kGoalsBg,
+    fontFamily: kAppFont,
     colorScheme: ColorScheme.fromSeed(
       seedColor: kGoalsGold,
       brightness: Brightness.light,
@@ -124,18 +135,18 @@ final ThemeData goalsLightTheme = () {
       backgroundColor: Colors.white,
       selectedColor: kGoalsGold,
       side: const BorderSide(color: kGoalsBorder),
-      labelStyle: const TextStyle(color: kGoalsInk),
-      secondaryLabelStyle: const TextStyle(color: Colors.white),
+      labelStyle: const TextStyle(color: kGoalsInk, fontFamily: kAppFont),
+      secondaryLabelStyle:
+          const TextStyle(color: Colors.white, fontFamily: kAppFont),
       checkmarkColor: Colors.white,
     ),
     snackBarTheme: const SnackBarThemeData(
       backgroundColor: kLightInk,
-      contentTextStyle: TextStyle(color: Colors.white),
+      contentTextStyle: TextStyle(fontFamily: kAppFont, color: Colors.white),
     ),
   );
   return base.copyWith(
-    textTheme: GoogleFonts.vazirmatnTextTheme(base.textTheme)
-        .apply(bodyColor: kGoalsInk, displayColor: kGoalsInk),
+    textTheme: _faTextTheme(base.textTheme, kGoalsInk),
   );
 }();
 
