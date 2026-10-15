@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import '../google_fonts_local.dart';
 import '../models/emotion.dart';
 
 /// ارتفاع هر ردیف لیست (ROW_H وب)
