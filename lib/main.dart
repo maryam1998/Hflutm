@@ -20,13 +20,19 @@ import 'state/theme_store.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await GoogleFonts.pendingFonts([
-    GoogleFonts.vazirmatn(fontWeight: FontWeight.w400),
-    GoogleFonts.vazirmatn(fontWeight: FontWeight.w500),
-    GoogleFonts.vazirmatn(fontWeight: FontWeight.w600),
-    GoogleFonts.vazirmatn(fontWeight: FontWeight.w700),
-    GoogleFonts.vazirmatn(fontWeight: FontWeight.w800),
-  ]);
+  // فونت از اینترنت می‌آد؛ اگه فیلتر/کند بود نباید برنامه رو سفید نگه داره
+  // (قبلاً بدون timeout منتظر می‌موند و صفحه سفید می‌موند).
+  try {
+    await GoogleFonts.pendingFonts([
+      GoogleFonts.vazirmatn(fontWeight: FontWeight.w400),
+      GoogleFonts.vazirmatn(fontWeight: FontWeight.w500),
+      GoogleFonts.vazirmatn(fontWeight: FontWeight.w600),
+      GoogleFonts.vazirmatn(fontWeight: FontWeight.w700),
+      GoogleFonts.vazirmatn(fontWeight: FontWeight.w800),
+    ]).timeout(const Duration(seconds: 3));
+  } catch (e) {
+    debugPrint('fonts not ready, continuing: $e');
+  }
 
   // IndexedDB (وب) باز و داده‌های قدیمیِ localStorage منتقل می‌شن
   try {
