@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'app.dart';
-// state ها
+
+// ── خدمات ──
+import 'services/storage.dart';
+
+// ── state ها ──
 import 'state/theme_store.dart';
 import 'state/emotion_store.dart';
 import 'state/gratitude_store.dart';
+import 'state/map_store.dart';
 import 'state/motivation_store.dart';
 import 'state/angels_store.dart';
 import 'state/background_store.dart';
-import 'state/map_store.dart';
 import 'state/abundance_store.dart';
 import 'state/beliefs_store.dart';
 
@@ -23,6 +27,9 @@ class MaghzRoot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ⚠️ اگر StorageService آرگومان می‌خواست، اینجا عوض کن
+    final storage = StorageService();
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeStore()..load()),
@@ -31,7 +38,7 @@ class MaghzRoot extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MotivationStore()..load()),
         ChangeNotifierProvider(create: (_) => AngelsStore()..load()),
         ChangeNotifierProvider(create: (_) => BackgroundStore()..load()),
-        ChangeNotifierProvider(create: (_) => MapStore()..load()),
+        ChangeNotifierProvider(create: (_) => MapStore(storage)..load()),
         ChangeNotifierProvider(create: (_) => AbundanceStore()..load()),
         ChangeNotifierProvider(create: (_) => BeliefsStore()..load()),
       ],
@@ -40,7 +47,6 @@ class MaghzRoot extends StatelessWidget {
   }
 }
 
-/// اتصال EmotionStore به GratitudeStore (برای رنگ‌آمیزی تقویم با حس‌ها)
 class _WireUp extends StatefulWidget {
   final Widget child;
   const _WireUp({required this.child});
@@ -63,9 +69,7 @@ class _WireUpState extends State<_WireUp> {
       emo.onEmotionsCommitted = (ids, dayKey) async {
         await grat.updateDayEmotions(dayKey, ids);
       };
-    } catch (_) {
-      // اگه EmotionStore متد onEmotionsCommitted رو نداشت، نادیده بگیر
-    }
+    } catch (_) {}
   }
 
   @override
