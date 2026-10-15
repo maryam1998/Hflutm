@@ -87,8 +87,8 @@ jobs:
           exit 1
 
       # پوش با توکن پیش‌فرض، workflowهای دیگر را خودکار اجرا نمی‌کند؛ پس بیلد را دستی صدا می‌زنیم
-      - name: Trigger build
+      - name: Trigger web deploy
         if: steps.run.outputs.pushed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run build.yml --ref "${{ github.ref_name }}" || echo "build.yml not found, skipped"
+        run: gh workflow run deploy-web.yml --ref "${{ github.ref_name }}" || echo "deploy-web.yml not found, skipped"
