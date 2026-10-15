@@ -1,12 +1,7 @@
 name: Build
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [main]
-    paths-ignore:
-      - '**.md'
-      - '**.zip'
+  workflow_dispatch:   # فقط دستی (Actions → Build → Run workflow)
 
 concurrency:
   group: build-${{ github.ref }}
