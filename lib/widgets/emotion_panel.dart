@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../google_fonts_local.dart';
 import 'package:provider/provider.dart';
 
 import '../state/emotion_store.dart';
